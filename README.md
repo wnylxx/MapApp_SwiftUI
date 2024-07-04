@@ -25,7 +25,7 @@
 - Identifiable 과 Hashable 의 차이
 - Results 를 초기화 하는 과정을 넣어주어야 하나?
 - MapView랑 SheetView랑 바인딩을 저렇게 하는게 맞나? 매개변수가 4개나 되는데 저걸 어떻게 해결할 수 있을까?
-
+- sheet 를 dismiss 안쓰고 isPresented로만 관리하는데 괜찮은가?
 
 
 

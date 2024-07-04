@@ -6,16 +6,28 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct ContentView: View {
+    @State var searchText: String = ""
+    @State var isSheetPresented: Bool = false
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        
+        NavigationStack {
+            ZStack{
+                MapView()
+                VStack{
+                    TextField("검색어를 입력하세요", text: $searchText)
+                        .textFieldStyle(.roundedBorder)
+                        .autocorrectionDisabled()
+                        .background(Color.white)
+                        .padding()
+                    Spacer()
+                }
+                
+            }
         }
-        .padding()
     }
 }
 

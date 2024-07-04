@@ -16,6 +16,10 @@ struct MapView: View {
         VStack{
             Map(position: $viewModel.cameraPosition)
                 .mapStyle(viewModel.mapStyle)
+                .mapControls {
+                    MapScaleView()
+                    MapUserLocationButton()
+                }
                 .onChange(of: style) {
                     switch style {
                     case 0:

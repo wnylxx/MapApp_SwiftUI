@@ -26,11 +26,13 @@ struct SheetView: View {
                     .onSubmit{
                         Task{
                             searchResults = (try? await viewModel.searchLocation(query: searchText)) ?? []
-                            cameraPosition = .region(MKCoordinateRegion(center: searchResults[0].location, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)))
                             print(searchResults)
+                            
+                            cameraPosition = .region(MKCoordinateRegion(center: searchResults[0].location, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)))
+                            searchTitle = searchText
+                            isSheetPresented = false
+                            
                         }
-                        searchTitle = searchText
-                        isSheetPresented = false
                     }
             }
             
@@ -67,10 +69,11 @@ struct SheetView: View {
             if let singleLocation = try? await viewModel.searchLocation(query: "\(completion.title) \(completion.subTitle)").first {
                 cameraPosition = .region(MKCoordinateRegion(center: singleLocation.location, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)))
                 searchResults = [singleLocation]
+                searchTitle = searchText
+                isSheetPresented = false
             }
         }
-        searchTitle = searchText
-        isSheetPresented = false
+        
     }
 }
 

@@ -11,10 +11,23 @@ import MapKit
 struct MapView: View {
     @State var viewModel = MapViewModel()
     @State var style = 0
+    @State var cameraPosition: MapCameraPosition = .userLocation(fallback: .automatic)
+    
+    @State var isSheetPresented: Bool = false
+    @State private var searchResults = [SearchResult]()
+    @State var searchTitle = "검색어를 입력하세요"
     
     var body: some View {
-        VStack{
-            Map(position: $viewModel.cameraPosition)
+        ZStack{
+            VStack{
+                Map(position: $cameraPosition) {
+                    ForEach(searchResults) { place in
+                        Marker(coordinate: place.location) {
+                            Image(systemName: "mappin.circle.fill")
+                        }
+                        .tag(place)
+                    }
+                }
                 .mapStyle(viewModel.mapStyle)
                 .mapControls {
                     MapScaleView()
@@ -32,13 +45,27 @@ struct MapView: View {
                         viewModel.mapStyle = .standard
                     }
                 }
-            
-            Picker("Map Style", selection:  $style) {
-                Text("Standard").tag(0)
-                Text("Imagery").tag(1)
-                Text("Hybrid").tag(2)
+                
+                Picker("Map Style", selection:  $style) {
+                    Text("Standard").tag(0)
+                    Text("Imagery").tag(1)
+                    Text("Hybrid").tag(2)
+                }
+                .pickerStyle(.segmented)
             }
-            .pickerStyle(.segmented)
+            
+            VStack{
+                Text("\(searchTitle)")
+                    .background(Color.white)
+                    .padding()
+                    .onTapGesture {
+                        isSheetPresented = true
+                    }
+                    .sheet(isPresented: $isSheetPresented) {
+                        SheetView(searchTitle: $searchTitle,isSheetPresented: $isSheetPresented, searchResults: $searchResults, cameraPosition: $cameraPosition)
+                    }
+                Spacer()
+            }
         }
     }
 }

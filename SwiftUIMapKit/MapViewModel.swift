@@ -17,18 +17,34 @@ struct SearchCompletions: Identifiable {
     var url: URL?
 }
 
+// marker에 tag 달려면 hashable 해야함
+struct SearchResult: Identifiable, Hashable {
+    let id = UUID()
+    let location: CLLocationCoordinate2D
+    
+    static func == (lhs: SearchResult, rhs: SearchResult) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
+
+
 
 @Observable
 class MapViewModel: NSObject, MKLocalSearchCompleterDelegate {
     private let completer = MKLocalSearchCompleter()
     
-    var cameraPosition: MapCameraPosition = .userLocation(fallback: .automatic)
+   
     var searchText = ""
     var mapStyle: MapStyle = .standard
     
     // MKLocalSearchCompletion 결과
     var completions = [SearchCompletions]()
     
+    var searchResults: [MKMapItem] = []
     
     override init() {
         super.init()
@@ -37,7 +53,7 @@ class MapViewModel: NSObject, MKLocalSearchCompleterDelegate {
     }
     
     
-    func update(queryFragment: String) {
+    func updateLocation(queryFragment: String) {
         completer.resultTypes = .pointOfInterest
         completer.queryFragment = queryFragment
     }
@@ -49,6 +65,30 @@ class MapViewModel: NSObject, MKLocalSearchCompleterDelegate {
             
             return .init(title: completion.title, subTitle: completion.subtitle, url: mapItem?.url)
         }
+    }
+    
+    func searchLocation(query: String, coordinate: CLLocationCoordinate2D? = nil) async throws -> [SearchResult] {
+        print("Search")
+        
+        let request = MKLocalSearch.Request()
+        request.naturalLanguageQuery = query
+        request.resultTypes = .pointOfInterest
+        
+        let search = MKLocalSearch(request: request)
+        
+        if let coordinate {
+            request.region = .init(.init(origin: .init(coordinate), size: .init(width: 1, height: 1)))
+        }
+        
+        let response = try await search.start()
+        
+        return response.mapItems.compactMap { mapItem in
+            guard let location = mapItem.placemark.location?.coordinate else { return nil }
+            
+            return .init(location: location)
+        }
+        
+        
     }
     
     

@@ -11,7 +11,6 @@ import MapKit
 struct ContentView: View {
     
     var body: some View {
-        
         NavigationStack {
             MapView()
         }

@@ -9,13 +9,14 @@ import SwiftUI
 import MapKit
 
 struct MapView: View {
+    @State var cameraPosition: MapCameraPosition = .userLocation(fallback: .automatic)
     @State var viewModel = MapViewModel()
     @State var style = 0
-    @State var cameraPosition: MapCameraPosition = .userLocation(fallback: .automatic)
-    
     @State var isSheetPresented: Bool = false
-    @State private var searchResults = [SearchResult]()
     @State var searchTitle = "검색어를 입력하세요"
+    
+    @State private var searchResults = [SearchResult]()
+    
     
     var body: some View {
         ZStack{

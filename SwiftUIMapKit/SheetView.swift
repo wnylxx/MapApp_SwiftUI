@@ -31,7 +31,6 @@ struct SheetView: View {
                             cameraPosition = .region(MKCoordinateRegion(center: searchResults[0].location, span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)))
                             searchTitle = searchText
                             isSheetPresented = false
-                            
                         }
                     }
             }
@@ -73,7 +72,6 @@ struct SheetView: View {
                 isSheetPresented = false
             }
         }
-        
     }
 }
 

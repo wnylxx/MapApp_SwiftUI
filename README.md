@@ -24,7 +24,7 @@
 - Task로 비동기 작업시 포함 시켜야 할 것 (ex. dismiss 는 Task 안에 넣어야하나?)
 - Identifiable 과 Hashable 의 차이
 - Results 를 초기화 하는 과정을 넣어주어야 하나?
-
+- MapView랑 SheetView랑 바인딩을 저렇게 하는게 맞나? 매개변수가 4개나 되는데 저걸 어떻게 해결할 수 있을까?
 
 
 
